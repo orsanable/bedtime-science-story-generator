@@ -16,10 +16,8 @@ Stories are in English.
 | ![Claude collects the answers](screenshots/02-claude-applies-answers.png) | The kids answer, the dad relays them, Claude updates `STORY_PAYLOAD` and re-themes the page. |
 | ![Story text and 6 panels render](screenshots/03-finished-story.png) | Click the big button. The story streams on the right while 6 watercolor panels render on the left. |
 
-Sample stories — the actual one-page printable PDFs the demo produces:
-- [Bilim Günü Hikaye Makinesi #1 (Turkish)](samples/bilim-gunu-hikaye-makinesi-1.pdf)
-- [Bilim Günü Hikaye Makinesi #2 (Turkish)](samples/bilim-gunu-hikaye-makinesi-2.pdf)
-- [Bedtime Science Story Machine (English)](samples/bedtime-science-story-machine-en.pdf)
+Sample story — the actual one-page printable PDF the demo produces:
+- [Bedtime Science Story Machine](samples/bedtime-science-story-machine-en.pdf)
 
 ## What you need
 
