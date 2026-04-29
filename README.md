@@ -1,20 +1,20 @@
 # Bedtime Science Story Generator
 
-A tiny live-coding toy for kids: ask 7 questions (character, setting, friend, activity, science topic, age, art style), and the page generates a 4-panel illustrated bedtime story that sneaks in a real science fact.
+A tiny live-coding toy for kids: ask 7 questions (character, setting, friend, activity, science topic, age, art style), and the page generates a 6-panel illustrated bedtime story that sneaks in a real science fact.
 
 Originally built as a vibecoding demo for a 6-year-old kindergarten class — the dad types prompts to Claude Code in one window, the kids watch the story appear in the browser next to it. Works just as well as a standalone bedtime-story machine at home.
 
-Stories are in Turkish by default. Easy to switch — see "Changing the language" below.
+Stories are in English.
 
-![Finished story with 4 panels and text](screenshots/03-finished-story.png)
+![Finished story with 6 panels and text](screenshots/03-finished-story.png)
 
 ## See it in action
 
 | Step | What happens |
 |---|---|
 | ![Claude asks the 7 questions](screenshots/01-claude-asks-questions.png) | The dad types `start a story` in Claude Code. Claude asks the 7 standard questions. |
-| ![Claude collects the answers](screenshots/02-claude-applies-answers.png) | The kids shout answers, the dad relays them, Claude updates `STORY_PAYLOAD` and re-themes the page. |
-| ![Story text and 4 panels render](screenshots/03-finished-story.png) | Click the big button. The story streams in Turkish on the right while 4 watercolor panels render on the left. |
+| ![Claude collects the answers](screenshots/02-claude-applies-answers.png) | The kids answer, the dad relays them, Claude updates `STORY_PAYLOAD` and re-themes the page. |
+| ![Story text and 6 panels render](screenshots/03-finished-story.png) | Click the big button. The story streams on the right while 6 watercolor panels render on the left. |
 
 Sample stories — the actual one-page printable PDFs the demo produces:
 - [Bilim Günü Hikaye Makinesi #1 (Turkish)](samples/bilim-gunu-hikaye-makinesi-1.pdf)
@@ -25,9 +25,9 @@ Sample stories — the actual one-page printable PDFs the demo produces:
 
 - Python 3.9+ (uses only the standard library, no `pip install`)
 - An [Anthropic API key](https://console.anthropic.com/) — for the story text
-- A [fal.ai API key](https://fal.ai/dashboard/keys) — for the 4 panel illustrations
+- A [fal.ai API key](https://fal.ai/dashboard/keys) — for the 6 panel illustrations
 
-Both providers are pay-as-you-go. **Each generated story costs about $0.18** (≈ $0.01 Claude + 4 × $0.04 fal.ai images). A full bedtime session is loose change.
+Both providers are pay-as-you-go. **Each generated story costs about $0.25** (≈ $0.01 Claude + 6 × $0.04 fal.ai images). A full bedtime session is loose change.
 
 ## Setup
 
@@ -57,9 +57,9 @@ const STORY_PAYLOAD = {
 };
 ```
 
-Then click the big button. The story streams in, and four panels render below it (~25 seconds total).
+Then click the big button. The story streams in, and six panels render alongside it (~25–35 seconds total).
 
-The "live coding next to the kids" experience is the whole point — you say "let's make the hero a robot dinosaur", you edit the file, the page updates, you click the button, the kids lose their minds. If you'd rather have a normal form with input fields, that's a 10-minute change.
+The "live coding next to the kids" experience is the whole point — you say "let's make the hero a robot dinosaur", you edit the file, the page updates, you click the button, the kids react. If you'd rather have a normal form with input fields, that's a 10-minute change.
 
 ## Architecture
 
@@ -67,8 +67,8 @@ Three files. That's it.
 
 - **`serve.py`** — Python `http.server` on port 8000. Reads `.env`, exposes:
   - `POST /api/story` — streams the story from Anthropic (Claude Sonnet 4.6) via SSE
-  - `POST /api/scenes` — passes the story to Claude Haiku, gets back 4 English image prompts
-  - `POST /api/image` — generates panels via fal.ai `nano-banana` (panel 1) and `nano-banana/edit` (panels 2–4, using panel 1 as reference for character consistency)
+  - `POST /api/scenes` — passes the story to Claude Haiku, gets back 6 image prompts
+  - `POST /api/image` — generates panels via fal.ai `nano-banana` (panel 1) and `nano-banana/edit` (panels 2–6, using panel 1 as reference for character consistency)
   - Static file serving with `Last-Modified` headers so the browser auto-reloads on edit
 - **`index.html`** — single page with the comic grid, story box, and button. Polls every 800 ms for changes and auto-reloads.
 - **`.env`** — your two API keys. Gitignored.
@@ -77,15 +77,15 @@ No build step, no `npm`, no virtualenv, no framework. By design — the whole th
 
 ## Changing the language
 
-The story prompt lives in `serve.py` in the `build_story_prompt` function. It's currently written in Turkish with quite specific guardrails (no scary imagery, no inflected names, age-6 vocabulary, science term + clarification pattern). Rewrite it in your language and the rest still works — the image generation is language-agnostic because Haiku translates to English image prompts in between.
+The story prompt lives in `serve.py` in the `build_story_prompt` function. It's written in English with specific guardrails (no scary imagery, English-only character names, age-appropriate vocabulary, science term + clarification pattern). Rewrite it in your language and the rest still works — the image generation is language-agnostic because the scenes step always produces English image prompts in between.
 
 ## Changing the visual theme
 
-The current background is a volcano theme (warm gradient + ember particles). The CSS in `index.html` controls body background, particle animation, button color, and accent colors. Search for `body {` and follow from there. Earlier versions had snow / ice themes; swapping is straightforward.
+The CSS in `index.html` controls body background, particle animation, button color, and accent colors. The page also re-themes itself per story (sky/clouds, volcano, snow, etc.) — search for `body {` and follow from there.
 
 ## Cost & rate limits
 
-- ~$0.18 per story end-to-end
+- ~$0.25 per story end-to-end (≈ $0.01 Claude + 6 × $0.04 fal.ai images)
 - Anthropic and fal.ai both have generous free credits when you sign up
 - Both keys stay server-side — the browser never sees them
 
