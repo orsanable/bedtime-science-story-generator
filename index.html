@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bedtime Science Story Machine</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background:
+        radial-gradient(ellipse at top, #fff8d6 0%, #ffe9a8 12%, #b8e3ff 38%, #7cc5f5 65%, #4ea8e0 100%);
+      background-attachment: fixed;
+      text-align: center;
+      padding: 40px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 75% 20%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 14%),
+        radial-gradient(ellipse at 20% 35%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 18%),
+        radial-gradient(ellipse at 55% 70%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 20%),
+        radial-gradient(ellipse at 85% 60%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 16%),
+        radial-gradient(ellipse at 30% 85%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 18%);
+      pointer-events: none;
+      z-index: 0;
+      animation: glow 6s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    h1, h2, .lava-btn, .story-box, .comic-grid, .layout, .controls, .school-name, .footer-line {
+      position: relative;
+      z-index: 1;
+    }
+    .school-name {
+      font-size: 18px;
+      color: #1e4a6f;
+      letter-spacing: 1px;
+      margin: 0 0 4px;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+    .footer-line {
+      margin-top: 24px;
+      font-size: 16px;
+      color: #1e4a6f;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+    .layout {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      max-width: 1500px;
+      margin: 20px auto;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .layout .comic-grid,
+    .layout .story-box {
+      flex: 1 1 420px;
+      margin: 0;
+    }
+    .layout .story-box {
+      max-width: 560px;
+      align-self: stretch;
+    }
+    h1 {
+      font-size: 36px;
+      color: #ffffff;
+      text-shadow:
+        0 0 10px #7cc5f5,
+        0 0 20px #4ea8e0,
+        0 2px 4px rgba(30, 74, 111, 0.6);
+    }
+    .story-box {
+      background: rgba(245, 252, 255, 0.94);
+      padding: 30px 40px;
+      margin: 20px auto;
+      max-width: 900px;
+      border: 2px solid #7cc5f5;
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(124, 197, 245, 0.55);
+      text-align: left;
+    }
+    #story-text {
+      font-size: 20px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      color: #1e4a6f;
+      margin: 0;
+    }
+    .comic-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 640px;
+      margin: 20px auto;
+    }
+    .panel {
+      background: rgba(245, 252, 255, 0.94);
+      border: 3px solid #7cc5f5;
+      border-radius: 16px;
+      box-shadow: 0 4px 25px rgba(124, 197, 245, 0.55);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .panel-label {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #4ea8e0;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 8px;
+      z-index: 2;
+      box-shadow: 0 0 10px rgba(124, 197, 245, 0.9);
+    }
+    .placeholder {
+      font-size: 22px;
+      color: #2a6b9a;
+      animation: bounce 1.2s ease-in-out infinite;
+      text-align: center;
+      padding: 20px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .ember {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle ease-in-out infinite;
+      filter: drop-shadow(0 0 6px #ffffff);
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .lava-btn {
+      background: linear-gradient(135deg, #ffffff 0%, #c8e8ff 30%, #7cc5f5 65%, #4ea8e0 100%);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 14px;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 14px 28px;
+      box-shadow:
+        0 0 20px rgba(124, 197, 245, 0.9),
+        0 4px 12px rgba(30, 74, 111, 0.4);
+      text-shadow: 0 1px 2px rgba(30, 74, 111, 0.5);
+    }
+    .lava-btn:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 30px rgba(255, 255, 255, 0.95),
+        0 6px 16px rgba(30, 74, 111, 0.4);
+    }
+    .print-btn {
+      background: linear-gradient(135deg, #ffffff 0%, #cfd8dc 60%, #607d8b 100%);
+      color: #0d0e2e;
+      border: 2px solid #ffffff;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px 22px;
+      box-shadow:
+        0 0 16px rgba(207, 216, 220, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .print-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media print {
+      @page { size: A4; margin: 10mm; }
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto;
+      }
+      body::before { display: none !important; }
+      .ember, .controls, script { display: none !important; }
+      h1 {
+        color: #000000 !important;
+        text-shadow: none !important;
+        font-size: 16px;
+        margin: 0 0 4px;
+      }
+      .school-name {
+        color: #000000 !important;
+        text-shadow: none !important;
+        font-size: 12pt;
+        font-weight: bold;
+        margin: 0 0 2px;
+        letter-spacing: 0.5px;
+        text-align: center;
+      }
+      .footer-line {
+        color: #000000 !important;
+        text-shadow: none !important;
+        font-size: 10pt;
+        margin: 6mm 0 0;
+        letter-spacing: 1.5px;
+        text-align: center;
+        font-style: italic;
+      }
+      .layout {
+        display: flex;
+        flex-direction: row;
+        gap: 8mm;
+        max-width: 100%;
+        margin: 0;
+        align-items: stretch;
+        page-break-inside: avoid;
+      }
+      .comic-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 1fr;
+        gap: 3mm;
+        width: 90mm;
+        max-width: 90mm;
+        height: 138mm;
+        margin: 0;
+        flex: 0 0 90mm;
+        page-break-inside: avoid;
+      }
+      .panel {
+        background: #ffffff !important;
+        border: 1px solid #888 !important;
+        box-shadow: none !important;
+        aspect-ratio: auto;
+        height: auto;
+        width: auto;
+        border-radius: 4px;
+      }
+      .panel-label { display: none !important; }
+      .story-box {
+        background: #ffffff !important;
+        border: 1px solid #888 !important;
+        box-shadow: none !important;
+        max-width: none;
+        margin: 0;
+        padding: 6mm 7mm;
+        flex: 1 1 auto;
+        page-break-inside: avoid;
+      }
+      #story-text {
+        color: #000000 !important;
+        font-size: 11pt;
+        line-height: 1.4;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Bedtime Science Story Machine</h1>
+
+  <div class="controls">
+    <button class="lava-btn" onclick="generateStory()">🦊 Write the Story! ☁️</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Story</button>
+  </div>
+
+  <div class="layout">
+    <div class="comic-grid" id="comic-grid">
+      <div class="panel"><div class="placeholder">1</div></div>
+      <div class="panel"><div class="placeholder">2</div></div>
+      <div class="panel"><div class="placeholder">3</div></div>
+      <div class="panel"><div class="placeholder">4</div></div>
+      <div class="panel"><div class="placeholder">5</div></div>
+      <div class="panel"><div class="placeholder">6</div></div>
+    </div>
+
+    <div class="story-box">
+      <p id="story-text">A winged fox and a fluffy little raincloud's cloud-top game of catch will begin here...</p>
+    </div>
+  </div>
+
+  <script>
+    // Story parameters - the kids' answers go here.
+    // `topic` is the parent's input: what you want your kid to learn tonight.
+    //   Leave it empty ('') and the story will pick a fitting fact on its own.
+    // `age` adjusts vocabulary, sentence complexity, and story length (3-14).
+    // `style` picks the illustration look. One of:
+    //   cartoon-2d | watercolor | cartoon-3d | pixar | anime | crayon | paper-cutout
+    const STORY_PAYLOAD = {
+      character: 'a friendly little fox with soft orange fur, a fluffy white-tipped tail, big curious eyes, and a pair of soft feathery wings that shimmer like a butterfly\'s',
+      setting: 'high up over the clouds, a sky kingdom of fluffy white cloud-hills, golden sunbeams, floating rainbows, and gentle breezes',
+      friend: 'a friendly little raincloud — a round, soft, fluffy gray-and-white cloud with sparkly eyes, a happy smile, and tiny raindrops dancing around it',
+      activity: 'playing catch together up in the sky, tossing a soft glowing ball back and forth between cloud-hills',
+      topic: 'how rain happens — the sun warms water on the ground, the water turns into invisible vapor and rises up into the sky, the vapor cools and gathers into tiny droplets that form clouds, and when the droplets get heavy enough they fall back down as rain.',
+      age: 6,
+      style: 'watercolor'
+    };
+
+    async function generateStory() {
+      resetPanels();
+      const storyText = await streamStory(STORY_PAYLOAD);
+      if (!storyText) return;
+      const scenes = await fetchScenes(STORY_PAYLOAD, storyText);
+      if (!scenes || scenes.length === 0) return;
+      renderPanels(scenes);
+    }
+
+    function resetPanels() {
+      const grid = document.getElementById('comic-grid');
+      grid.innerHTML = '';
+      for (let i = 1; i <= 6; i++) {
+        const panel = document.createElement('div');
+        panel.className = 'panel';
+        panel.innerHTML = `<div class="panel-label">${i}</div><div class="placeholder">🦊 Loading... ☁️</div>`;
+        grid.appendChild(panel);
+      }
+    }
+
+    async function streamStory(payload) {
+      const target = document.getElementById('story-text');
+      target.textContent = '';
+
+      let res;
+      try {
+        res = await fetch('/api/story', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        target.textContent = 'Connection error.';
+        return null;
+      }
+
+      if (!res.ok) {
+        target.textContent = 'Could not write the story.';
+        return null;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let full = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const evt = JSON.parse(line.slice(6));
+            if (evt.type === 'content_block_delta' && evt.delta?.text) {
+              target.textContent += evt.delta.text;
+              full += evt.delta.text;
+            }
+          } catch (e) {}
+        }
+      }
+      return full;
+    }
+
+    async function fetchScenes(payload, story) {
+      try {
+        const res = await fetch('/api/scenes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, story })
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.scenes || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function renderPanels(scenes) {
+      const panels = document.querySelectorAll('.panel');
+      const slice = scenes.slice(0, 6);
+      if (slice.length === 0) return;
+
+      const firstUrl = await renderOnePanel(panels[0], slice[0], 1, null);
+      if (!firstUrl) {
+        await Promise.all(slice.slice(1).map((scene, i) =>
+          renderOnePanel(panels[i + 1], scene, i + 2, null)
+        ));
+        return;
+      }
+
+      await Promise.all(slice.slice(1).map((scene, i) =>
+        renderOnePanel(panels[i + 1], scene, i + 2, firstUrl)
+      ));
+    }
+
+    async function renderOnePanel(panel, scene, idx, referenceUrl) {
+      panel.innerHTML = `<div class="panel-label">${idx}</div><div class="placeholder">✨ Drawing ✨</div>`;
+      try {
+        const body = { scene, style: STORY_PAYLOAD.style };
+        if (referenceUrl) body.reference_url = referenceUrl;
+        const res = await fetch('/api/image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+          panel.innerHTML = `<div class="panel-label">${idx}</div><div class="placeholder">Drawing failed 😢</div>`;
+          return null;
+        }
+        const data = await res.json();
+        if (data.url) {
+          panel.innerHTML = `<div class="panel-label">${idx}</div><img src="${data.url}" alt="Panel ${idx}">`;
+          return data.url;
+        }
+        return null;
+      } catch (e) {
+        panel.innerHTML = `<div class="panel-label">${idx}</div><div class="placeholder">Çizilemedi 😢</div>`;
+        return null;
+      }
+    }
+
+    const leafChars = ['☁️', '💧', '🌧️', '🌈', '☀️', '✨', '🪶'];
+    const leafColors = ['#ffffff', '#c8e8ff', '#7cc5f5', '#4ea8e0', '#fff59d'];
+    for (let i = 0; i < 60; i++) {
+      const ember = document.createElement('div');
+      ember.className = 'ember';
+      ember.textContent = leafChars[i % leafChars.length];
+      ember.style.left = Math.random() * 100 + 'vw';
+      ember.style.top = Math.random() * 100 + 'vh';
+      ember.style.fontSize = (8 + Math.random() * 18) + 'px';
+      ember.style.color = leafColors[i % leafColors.length];
+      ember.style.animationDuration = (2 + Math.random() * 4) + 's';
+      ember.style.animationDelay = -Math.random() * 4 + 's';
+      document.body.appendChild(ember);
+    }
+  </script>
+
+  <!-- Demo sırasında otomatik yenileme. Demo bitince bu script'i sil. -->
+  <script>
+    let lastChange = null;
+    setInterval(async () => {
+      try {
+        const res = await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+        const mod = res.headers.get('last-modified');
+        if (lastChange && mod && mod !== lastChange) {
+          window.location.reload();
+        }
+        lastChange = mod;
+      } catch (e) {}
+    }, 800);
+  </script>
+</body>
+</html>
