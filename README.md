@@ -1,10 +1,25 @@
 # Bedtime Science Story Generator
 
-A tiny live-coding toy for kids: ask 4 questions ("who's the hero?", "where do they live?", "who's their friend?", "what are they doing?"), and the page generates a 4-panel illustrated bedtime story that sneaks in a real science fact.
+A tiny live-coding toy for kids: ask 7 questions (character, setting, friend, activity, science topic, age, art style), and the page generates a 4-panel illustrated bedtime story that sneaks in a real science fact.
 
 Originally built as a vibecoding demo for a 6-year-old kindergarten class — the dad types prompts to Claude Code in one window, the kids watch the story appear in the browser next to it. Works just as well as a standalone bedtime-story machine at home.
 
 Stories are in Turkish by default. Easy to switch — see "Changing the language" below.
+
+![Finished story with 4 panels and text](screenshots/03-finished-story.png)
+
+## See it in action
+
+| Step | What happens |
+|---|---|
+| ![Claude asks the 7 questions](screenshots/01-claude-asks-questions.png) | The dad types `start a story` in Claude Code. Claude asks the 7 standard questions. |
+| ![Claude collects the answers](screenshots/02-claude-applies-answers.png) | The kids shout answers, the dad relays them, Claude updates `STORY_PAYLOAD` and re-themes the page. |
+| ![Story text and 4 panels render](screenshots/03-finished-story.png) | Click the big button. The story streams in Turkish on the right while 4 watercolor panels render on the left. |
+
+Sample stories — the actual one-page printable PDFs the demo produces:
+- [Bilim Günü Hikaye Makinesi #1 (Turkish)](samples/bilim-gunu-hikaye-makinesi-1.pdf)
+- [Bilim Günü Hikaye Makinesi #2 (Turkish)](samples/bilim-gunu-hikaye-makinesi-2.pdf)
+- [Bedtime Science Story Machine (English)](samples/bedtime-science-story-machine-en.pdf)
 
 ## What you need
 
