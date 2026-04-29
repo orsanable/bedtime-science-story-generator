@@ -41,7 +41,7 @@ Open <http://localhost:8000>.
 
 ## Using it
 
-The 4 inputs (character, setting, friend, activity) are hardcoded in `index.html` as a `STORY_PAYLOAD` constant near the top of the `<script>` block. Edit them and save — the page auto-reloads.
+The 7 inputs (character, setting, friend, activity, topic, age, style) are hardcoded in `index.html` as a `STORY_PAYLOAD` constant near the top of the `<script>` block. Edit them and save — the page auto-reloads.
 
 ```js
 const STORY_PAYLOAD = {
